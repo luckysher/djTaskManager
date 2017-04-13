@@ -1,8 +1,7 @@
 ##################################
-#                               #
 #           djTaskManager       #
-#                               #
 ##################################
+
 A simple Django application for managing the tasks of a person using django framework, views, forms, custom tags, templates,
 bootstrap, jquery, css etc.
 
