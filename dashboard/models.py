@@ -2,28 +2,30 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from security.models import TaskUser
 
-
-
-class User(models.Model):
-    id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=50, default=None)
-
-    def __unicode__(self):
-        return self.name
 
 class Task(models.Model):
     STATUS_CHOICES = (
-        ('Done', 'Done'),
-        ('In Progress', 'In Progress'),
-        ('Not done', 'Not done'),
-    )
+        (0, 'Not done'),
+        (1, 'In Progress'),
+        (2, 'Done'),)
 
-    tid = models.AutoField(primary_key=True)
-    name = models.OneToOneField(User, on_delete=models.CASCADE)
-    task = models.CharField(max_length=250, default=None)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES)
-    datetime = models.DateField()
+    tid = models.AutoField(verbose_name="Task Id",
+                           primary_key=True)
+    user_id = models.ForeignKey(TaskUser)
+    taskname = models.CharField(verbose_name="Short name for task",
+                                max_length=30)
+    task = models.CharField(verbose_name="Task with details",
+                            max_length=250,
+                            blank=False)
+    status = models.IntegerField(verbose_name="Status of task",
+                                 choices=STATUS_CHOICES,
+                                 default=0)
+    duedate = models.DateField(verbose_name='Dau date for task',
+                               blank=False)
+    time = models.TimeField(verbose_name='Time',
+                            blank=False)
 
     def __unicode__(self):
-        return "%s( %s.....)" % (self.name, self.task[:30])
+        return "%s( %s.....)" % (self.taskname, self.task[:30])
