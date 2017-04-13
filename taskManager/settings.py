@@ -15,6 +15,7 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+TASK_MANAGER_ROOT = os.path.dirname(os.path.join(BASE_DIR, '..'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
@@ -27,17 +28,25 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+STATICFILES_DIRS = (
+    os.path.join(TASK_MANAGER_ROOT, 'content', 'static'),
+)
 
 # Application definition
 
 INSTALLED_APPS = [
-    'dashboard.apps.DashboardConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'security',
+    'content',
+    'component',
+    'bootstrapform',
+    'dashboard',
+    'content.templatetags.custom_tags',
 ]
 
 MIDDLEWARE = [
@@ -52,10 +61,22 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'taskManager.urls'
 
+# task manager config
+LOGIN_URL = '/login/'
+AUTHENTICATION_BACKENDS = (
+    'security.models.TaskUserAuthBackend',
+)
+AUTH_USER_MODEL = 'security.TaskUser'
+AUTH_BACKEND = 'security.models.TaskUserAuthBackend'
+
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+                    'content/templates',
+                    'dashboard/templates',
+                 ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
